@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.972549, g: 0.972549, b: 0.972549, a: 0.972549}
+  m_Color: {r: 1, g: 0, b: 0, a: 0.972549}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -711,7 +711,7 @@ GameObject:
   - component: {fileID: 722191118}
   - component: {fileID: 722191117}
   m_Layer: 0
-  m_Name: Image (1)
+  m_Name: BackgroundTile2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -732,7 +732,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 846, y: 0}
+  m_AnchoredPosition: {x: 510.99994, y: 0}
   m_SizeDelta: {x: 846.3, y: 546.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &722191117
@@ -969,7 +969,7 @@ GameObject:
   - component: {fileID: 1307262044}
   - component: {fileID: 1307262045}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: BackgroundScroller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -992,7 +992,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 50, y: -14}
+  m_AnchoredPosition: {x: 50, y: 38}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1307262045
@@ -1007,7 +1007,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollSpeed: 50
-  imageSize: 0
   bgImage: {fileID: 1440655022}
 --- !u!1 &1429861767
 GameObject:
@@ -1088,7 +1087,7 @@ GameObject:
   - component: {fileID: 1440655023}
   - component: {fileID: 1440655022}
   m_Layer: 0
-  m_Name: Image
+  m_Name: BackgroundTile1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1109,7 +1108,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000076293945, y: 0}
+  m_AnchoredPosition: {x: -335, y: 0}
   m_SizeDelta: {x: 846.3, y: 546.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1440655022
