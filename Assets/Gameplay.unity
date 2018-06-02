@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 0.972549}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.972549}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1179,7 +1179,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1bb69e7028d3c764d94b745fd4ed53d3, type: 3}
   - {fileID: 21300000, guid: d0dacf4d678f77b4cbb0e00c1ed9bfb7, type: 3}
   errorSprite: {fileID: 21300000, guid: 15548ebf235cb744c97d535f5bf32631, type: 3}
-  UICanvasImplementation: 1
   menuCanvas: {fileID: 441912321}
   gameCanvas: {fileID: 239255394}
   gameOverCanvas: {fileID: 1655481763}
