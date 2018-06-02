@@ -61,19 +61,11 @@ public class BoardTile : MonoBehaviour, IPointerClickHandler {
 
         tileState = TileState.Empty;
 
-        if(GameController.Instance.UICanvasImplementation)
-        {
-            // Let's set its position and size now.
-            gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(tileSize, tileSize);
-            gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(xPos, -yPos);
+        // Let's set its position and size now.
+        gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(tileSize, tileSize);
+        gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector3(xPos, -yPos);
 
-            playerSymbolImage.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(tileSize, tileSize);
-        } else
-        {
-            float newSizeScalar = tileSize / transform.GetChild(1).GetComponent<SpriteRenderer>().bounds.size.x;
-            transform.position = new Vector3(xPos, yPos);
-            transform.localScale = new Vector3(newSizeScalar, newSizeScalar);
-        }
+        playerSymbolImage.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(tileSize, tileSize);
         
 
         initialized = true;
@@ -105,22 +97,15 @@ public class BoardTile : MonoBehaviour, IPointerClickHandler {
     // Used to set the sprite of the playerSymbol, which shows who has selected this tile.
     public void UpdatePlayerSprite(Sprite sprite)
     {
-        if(GameController.Instance.UICanvasImplementation)
-        {
-            playerSymbolImage.sprite = sprite;
-            playerSymbolImage.color = Color.white;
-        } else
-        {
-            playerSymbolSpriteRenderer.sprite = sprite;
-        }
+        playerSymbolImage.sprite = sprite;
+        playerSymbolImage.color = Color.white;
     }
 
     public void ResetTile()
     {
-        if (GameController.Instance.UICanvasImplementation)
-        {
-            playerSymbolImage.color = new Color(0,0,0,0);
-        }
+        // We don't need to change the sprite, we can just make it transparent, since
+        // UpdatePlayerSprite will also reset the opacity.
+        playerSymbolImage.color = new Color(0,0,0,0);
 
         tileState = TileState.Empty;
     }

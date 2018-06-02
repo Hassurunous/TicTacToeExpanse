@@ -20,19 +20,8 @@ public class GameController : MonoBehaviour {
 
     // Keep track of whose turn it is.
     // By making it static, we will be able to access it even if there is not a GameController object.
-    private static int _playerTurn;
-    public static int playerTurn
-    {
-        get
-        {
-            return _playerTurn;
-        }
-        //set
-        //{
-        //    Debug.Log("Player1Turn updated. New value = " + value);
-        //    _player1Turn = value;
-        //}
-    }
+    // By giving it a private setter, we ensure that no other scripts can modify it.
+    public static int playerTurn {get; private set;}
 
     // Track the state that the game is in. It will start in the "Menu" state, initially.
     private static GameState gameState = GameState.Menu;
@@ -44,9 +33,6 @@ public class GameController : MonoBehaviour {
     // This is a sprite used to show when other sprites have not loaded or been referenced correctly.
     [SerializeField]
     Sprite errorSprite;
-
-    [SerializeField]
-    public bool UICanvasImplementation = false;
 
     // Instancing so that static methods can be used with non-static properties
     public static GameController Instance { get; private set; }
@@ -94,11 +80,11 @@ public class GameController : MonoBehaviour {
             return;
         }
 
-        _playerTurn += 1;
+        playerTurn += 1;
 
-        if(_playerTurn >= numOfPlayers)
+        if(playerTurn >= numOfPlayers)
         {
-            _playerTurn = 0;
+            playerTurn = 0;
         }
 
         Debug.Log("Player " + (playerTurn + 1) + "'s turn!");
@@ -143,6 +129,7 @@ public class GameController : MonoBehaviour {
     {
         // Hide the menu and/or game over screen once we start the game.
         menuCanvas.SetActive(false);
+        gameCanvas.SetActive(true);
         gameOverCanvas.SetActive(false);
 
         // Set up the board.
@@ -156,6 +143,7 @@ public class GameController : MonoBehaviour {
     {
         // Hide the menu and/or game over screen once we start the game.
         menuCanvas.SetActive(true);
+        gameCanvas.SetActive(false);
         gameOverCanvas.SetActive(false);
 
         // Set the gameState
@@ -166,16 +154,21 @@ public class GameController : MonoBehaviour {
     {
         // Hide the menu and/or game over screen once we start the game.
         menuCanvas.SetActive(false);
+        gameCanvas.SetActive(true);
         gameOverCanvas.SetActive(false);
 
         // Set the gameState
         gameState = GameState.Playing;
+
+        // Reset the player turn.
+        playerTurn = 0;
     }
 
     public void GameOver(bool playerWon)
     {
         // Hide the menu and/or game over screen once we start the game.
         menuCanvas.SetActive(false);
+        gameCanvas.SetActive(false);
         gameOverCanvas.SetActive(true);
 
         if (victoryText)

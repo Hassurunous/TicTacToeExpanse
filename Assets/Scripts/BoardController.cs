@@ -90,15 +90,11 @@ public class BoardController : MonoBehaviour {
         // and pick the smaller of the two dimensions.
         float boardWidth = 0f;
         float boardHeight = 0f;
-        if (GameController.Instance.UICanvasImplementation)
-        {
-            RectTransform rectTransform = gameCanvas.GetComponent<RectTransform>();
-            boardWidth = rectTransform.rect.width;
-            boardHeight = rectTransform.rect.height;
-        } else
-        {
-            // TODO: If the UICanvas Implementation doesn't work as well as initially thought, then build this functionality.
-        }
+
+        // We check the size of the canvas since CanvasScaler scales for screen size.
+        RectTransform rectTransform = gameCanvas.GetComponent<RectTransform>();
+        boardWidth = rectTransform.rect.width;
+        boardHeight = rectTransform.rect.height;
 
         // Now that we know the size of our board, we can calculate the size of the tiles. 
         float tileSize = boardHeight < boardWidth ? boardHeight / size : boardWidth / size;
@@ -108,6 +104,7 @@ public class BoardController : MonoBehaviour {
         float xPos = 0f;
         float yPos = 0f;
 
+        // Now we instantiate and place the tiles in the correct position.
         for(int row = 0; row < size; row++)
         {
             xPos = (boardWidth / 2) - (tileSize * (boardsize / 2));
@@ -116,13 +113,7 @@ public class BoardController : MonoBehaviour {
                 // Instantiate a copy of the boardTilePrefab at the appropriate position.
                 GameObject tile;
 
-                if (GameController.Instance.UICanvasImplementation)
-                {
-                    tile = Instantiate(boardTileUIPrefab, gameCanvas.transform);
-                } else
-                {
-                    tile = Instantiate(boardTilePrefab, gameCanvas.transform);
-                }
+                tile = Instantiate(boardTileUIPrefab, gameCanvas.transform);
 
                 BoardTile boardTile = tile.GetComponent<BoardTile>();
                 boardTile.InitializeTile(column, row, tileSize, xPos, yPos);
