@@ -30,6 +30,9 @@ public class GameController : MonoBehaviour {
     [SerializeField]
     Sprite[] playerSprites;
 
+    // List of sprites selected by the players. Instantiated empty, to be appended to during player selection.
+    Dictionary<int, Sprite> chosenSprites = new Dictionary<int, Sprite>();
+
     // This is a sprite used to show when other sprites have not loaded or been referenced correctly.
     [SerializeField]
     Sprite errorSprite;
@@ -38,10 +41,22 @@ public class GameController : MonoBehaviour {
     public static GameController Instance { get; private set; }
 
     [SerializeField]
-    GameObject menuCanvas, gameCanvas, gameOverCanvas;
+    GameObject menuCanvas, playerSelectCanvas, gameCanvas, gameOverCanvas;
+
+    [SerializeField]
+    PlayerSelectItemsManager playerSelectItemsManager;
 
     [SerializeField]
     Text victoryText;
+
+    int boardSize;
+
+    // This event will be used to show when a "round" has completed (i.e. every player has gone once).
+    // This event could be used to play animations, move the state of the game forward...etc. when this
+    // occurs. The first usage foreseen for this is to transition from the Player Select screen when all
+    // players have chosen a sprite to use.
+    public delegate void RoundComplete();
+    public event RoundComplete OnRoundComplete;
 
     #region Unity Monobehaviour Overrides
     void Awake()
@@ -75,36 +90,47 @@ public class GameController : MonoBehaviour {
     #region Public Functions
     public static void NextTurn()
     {
-        if (GameController.gameState == GameState.Menu || GameController.gameState == GameState.PlayerWon || GameController.gameState == GameState.Draw)
-        {
-            return;
-        }
+        //if (GameController.gameState == GameState.Menu || GameController.gameState == GameState.PlayerWon || GameController.gameState == GameState.Draw)
+        //{
+        //    return;
+        //}
 
         playerTurn += 1;
 
         if(playerTurn >= numOfPlayers)
         {
             playerTurn = 0;
+            if(gameState == GameState.Menu)
+            {
+                GameController.Instance.PlayGame();
+            }
         }
 
         Debug.Log("Player " + (playerTurn + 1) + "'s turn!");
     }
 
-    public static void UpdateGameState(GameState newState)
+    public static void UpdateGameState(GameState newState, bool playerWon=false)
     {
         GameController.gameState = newState;
-        if (GameController.gameState == GameState.PlayerWon)
+        if (GameController.gameState == GameState.GameOver)
         {
-            GameController.Instance.GameOver(true);
+            GameController.Instance.GameOver(playerWon);
             Debug.Log("Game Over! Player " + (GameController.playerTurn + 1) + " wins!");
-        } else if (GameController.gameState == GameState.Draw) {
-            GameController.Instance.GameOver(false);
         } else if (GameController.gameState == GameState.Menu)
         {
             GameController.Instance.MainMenu();
         }
     }
 
+    // This method will be used on the player selection screen to set the player sprites to be used in the GetCurrentPlayerSprite
+    // method so that the board can place the tiles correctly.
+    public void SetCurrentPlayerSprite(Sprite sprite)
+    {
+        chosenSprites[GameController.playerTurn] = sprite;
+        NextTurn();
+    }
+
+    // Return the sprite that should be used for the current player. 
     public static Sprite GetCurrentPlayerSprite()
     {
         // We'll set the sprite to default as the errorSprite, then change it if we are able to return a playerSprite
@@ -114,7 +140,7 @@ public class GameController : MonoBehaviour {
         // sprites set for the number of players, or if there is an error in the playerSprites array.
         try
         {
-            sprite = GameController.Instance.playerSprites[GameController.playerTurn];
+            sprite = GameController.Instance.chosenSprites[GameController.playerTurn];
         }
         catch
         {
@@ -125,37 +151,58 @@ public class GameController : MonoBehaviour {
 
     }
 
-    public void PlayGame(int boardSize)
+    // Set the board size to be used in the game before moving to the playerSelect screen.
+    public void SetBoardSize(int size)
+    { 
+        boardSize = size;
+    }
+
+    public void PlayGame()
     {
         // Hide the menu and/or game over screen once we start the game.
         menuCanvas.SetActive(false);
         gameCanvas.SetActive(true);
         gameOverCanvas.SetActive(false);
+        playerSelectCanvas.SetActive(false);
 
         // Set up the board.
         gameObject.GetComponent<BoardController>().SetupBoard(boardSize);
 
         // Set the gameState
         gameState = GameState.Playing;
+
+        // Reset the player select buttons for the next time they are needed.
+        //playerSelectItemsManager.ResetButtons();
     }
 
     public void MainMenu()
     {
-        // Hide the menu and/or game over screen once we start the game.
+        // Hide the game, game over, and playerSelect screen when we return to the main menu.
         menuCanvas.SetActive(true);
         gameCanvas.SetActive(false);
         gameOverCanvas.SetActive(false);
+        playerSelectCanvas.SetActive(false);
 
         // Set the gameState
         gameState = GameState.Menu;
     }
 
+    public void PlayerSelectScreen()
+    {
+        // Hide all other screens and display the Player Select Screen.
+        menuCanvas.SetActive(false);
+        gameCanvas.SetActive(false);
+        gameOverCanvas.SetActive(false);
+        playerSelectCanvas.SetActive(true);
+    }
+
     public void RetryGame()
     {
-        // Hide the menu and/or game over screen once we start the game.
+        // Hide all other screens and display the game screen.
         menuCanvas.SetActive(false);
         gameCanvas.SetActive(true);
         gameOverCanvas.SetActive(false);
+        playerSelectCanvas.SetActive(false);
 
         // Set the gameState
         gameState = GameState.Playing;
@@ -170,6 +217,7 @@ public class GameController : MonoBehaviour {
         menuCanvas.SetActive(false);
         gameCanvas.SetActive(false);
         gameOverCanvas.SetActive(true);
+        playerSelectCanvas.SetActive(false);
 
         if (victoryText)
         {
@@ -190,6 +238,5 @@ public enum GameState
 {
     Menu,
     Playing,
-    PlayerWon,
-    Draw
+    GameOver
 }

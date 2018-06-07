@@ -310,10 +310,10 @@ public class BoardController : MonoBehaviour {
 
         if (CheckWins(tile))
         {
-            GameController.UpdateGameState(GameState.PlayerWon);
+            GameController.UpdateGameState(GameState.GameOver, true);
             gameOver = true;
         } else if (CheckTie()) {
-            GameController.UpdateGameState(GameState.Draw);
+            GameController.UpdateGameState(GameState.GameOver, false);
             gameOver = true;
         } else
         {
